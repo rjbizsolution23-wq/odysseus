@@ -1,0 +1,36 @@
+# wrangler.toml - Cloudflare-First Edge Worker Configuration for JUKEYMAN
+
+name = "jukeyman-edge-worker"
+main = "src/index.ts"
+compatibility_date = "2026-06-08"
+compatibility_flags = ["nodejs_compat"]
+
+# [vars] - Global Environment Variables
+[vars]
+ENVIRONMENT = "production"
+API_ROOT_URL = "https://odysseus.empirecontentstudios.com"  # Odysseus App tunnel routing
+
+# [[kv_namespaces]] - Key-Value Store for Session Caching & Rate Limiting
+[[kv_namespaces]]
+binding = "JUKEYMAN_SESSIONS"
+id = "jukeyman-sessions-kv-placeholder"
+
+[[kv_namespaces]]
+binding = "JUKEYMAN_RATELIMIT"
+id = "jukeyman-ratelimit-kv-placeholder"
+
+# [[r2_buckets]] - High-performance Object Storage for Generated Images/Videos
+[[r2_buckets]]
+binding = "JUKEYMAN_ASSETS"
+bucket_name = "jukeyman-assets"
+preview_bucket_name = "jukeyman-assets-preview"
+
+# [[d1_databases]] - SQLite database on the edge (Enterprise redundancy)
+[[d1_databases]]
+binding = "JUKEYMAN_DB"
+database_name = "jukeyman-d1-db"
+database_id = "jukeyman-d1-db-placeholder"
+
+# [observability] - Cloudflare Observability & Distributed Tracing
+[observability]
+enabled = true
